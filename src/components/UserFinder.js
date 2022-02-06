@@ -2,14 +2,12 @@ import { Fragment, useState, useEffect, Component } from 'react';
 
 import Users from './Users';
 import classes from './UserFinder.module.css';
-
-const DUMMY_USERS = [
-  { id: 'u1', name: 'Max' },
-  { id: 'u2', name: 'Manuel' },
-  { id: 'u3', name: 'Julie' },
-];
+import UsersContext from '../store/users-context';
 
 class UserFinder extends Component {
+  //we declare contextType here in order to get access to values in the context provider form this component 
+  static contextType = UsersContext;
+
   constructor() {
     super();
     this.state = {
@@ -18,22 +16,16 @@ class UserFinder extends Component {
     };
   }
 
-  //useEffect withut any dependency will always execute for the first time as componentDidMount function
   componentDidMount() {
     // Send http request...
-    this.setState({ filteredUsers: DUMMY_USERS });
+    //here we get access to users variable in the context
+    this.setState({ filteredUsers: this.context.users });
   }
 
-  //If you look at the botom commented code you will see the difference that useEffect is used only once 
-  //useEffect is called automatically when searchTerm variable is changed
-  //in case of class component we have to use componentDidUpdate method to update value
-  //componentDidUpdate method is called every time when something is changed in the component 
-  //that's why we use comparison of prevState and current state in order to update the value of 
-  //filteredUsers only when the searchTerm value is changed 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
       this.setState({
-        filteredUsers: DUMMY_USERS.filter((user) =>
+        filteredUsers: this.context.users.filter((user) =>
           user.name.includes(this.state.searchTerm)
         ),
       });
