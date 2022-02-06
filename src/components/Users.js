@@ -3,9 +3,6 @@ import { Component } from 'react';
 import User from './User';
 import classes from './Users.module.css';
 
-
-//it looks like that only class based components have life cycle methods
-//function components don't have it because they can always use useEffect()
 class Users extends Component {
   constructor() {
     super();
@@ -15,12 +12,20 @@ class Users extends Component {
     };
   }
 
+  componentDidUpdate() {
+    // try {
+    //   someCodeWhichMightFail()
+    // } catch (err) {
+    //   // handle error
+    // }
+    if (this.props.users.length === 0) {
+      throw new Error('No users provided!');
+    }
+  }
+
   toggleUsersHandler() {
-    //this.state.showUsers = false; // NOT!
-    //setState takes a new state as an input parameter 
-    //in the setState we use function () => {} to assign value to the variable  
+    // this.state.showUsers = false; // NOT!
     this.setState((curState) => {
-      //here we return object that inverts state 
       return { showUsers: !curState.showUsers };
     });
   }
@@ -33,9 +38,7 @@ class Users extends Component {
         ))}
       </ul>
     );
-    
-    //we use word 'this' to reference function in this class
-     //bind(this) is used ot reference to the value in the local area
+
     return (
       <div className={classes.users}>
         <button onClick={this.toggleUsersHandler.bind(this)}>

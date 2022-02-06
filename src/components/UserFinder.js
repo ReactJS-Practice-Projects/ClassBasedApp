@@ -3,9 +3,9 @@ import { Fragment, useState, useEffect, Component } from 'react';
 import Users from './Users';
 import classes from './UserFinder.module.css';
 import UsersContext from '../store/users-context';
+import ErrorBoundary from './ErrorBoundary';
 
 class UserFinder extends Component {
-  //we declare contextType here in order to get access to values in the context provider form this component 
   static contextType = UsersContext;
 
   constructor() {
@@ -18,7 +18,6 @@ class UserFinder extends Component {
 
   componentDidMount() {
     // Send http request...
-    //here we get access to users variable in the context
     this.setState({ filteredUsers: this.context.users });
   }
 
@@ -42,7 +41,9 @@ class UserFinder extends Component {
         <div className={classes.finder}>
           <input type='search' onChange={this.searchChangeHandler.bind(this)} />
         </div>
-        <Users users={this.state.filteredUsers} />
+        <ErrorBoundary>
+          <Users users={this.state.filteredUsers} />
+        </ErrorBoundary>
       </Fragment>
     );
   }
