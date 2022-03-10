@@ -19,7 +19,7 @@ class Users extends Component {
     //   // handle error
     // }
     if (this.props.users.length === 0) {
-      throw new Error('No users provided!');
+      //throw new Error('No users provided!');
     }
   }
 
